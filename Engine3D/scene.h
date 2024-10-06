@@ -8,7 +8,6 @@
 
 class Scene : public MovableGLM
 {
-
 public:
 	enum axis{xAxis,yAxis,zAxis};
 	enum transformations{xTranslate, yTranslate, zTranslate, xRotate, yRotate, zRotate, xScale, yScale, zScale, xCameraTranslate, yCameraTranslate, zCameraTranslate};
@@ -35,7 +34,7 @@ public:
 	virtual void WhenTranslate(){};
 	virtual void WhenRotate(){};
 	virtual void Motion(){};
-	virtual void Draw(int shaderIndx,int cameraIndx,int buffer,bool toClear,bool debugMode);
+	virtual void Draw(int shaderIndx,int cameraIndx,int buffer,bool toClear, bool debugMode, int screenNum = -1);
 	virtual ~Scene(void);
 
 	void MoveCamera(int cameraIndx,int type,float amt);
@@ -62,9 +61,11 @@ public:
 	
 	inline void SetShapeTex(int shpIndx,int texIndx){shapes[shpIndx]->SetTexture(texIndx);} 
 	inline void SetShapeShader(int shpIndx,int shdrIndx){shapes[shpIndx]->SetShader(shdrIndx);} 
+
+	// New methods
+	std::vector<Shape*>* getShapes() { return &shapes; }
 	
-private:	
-	
+private:
 	std::vector<Camera*> cameras; 
 
 	float depth;
@@ -79,7 +80,5 @@ protected:
 	std::vector<Texture*> textures;
 	
 	int pickedShape;
-	
 	bool isActive;
 };
-

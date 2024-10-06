@@ -18,16 +18,36 @@ int main(int argc,char *argv[])
 	Init(display);
 	
 	scn->Init();
+	scn->AddShape(scn->Plane, -1, scn->TRIANGLES);
+	scn->MoveCamera(0, scn->zTranslate, 10);
 
 	display.SetScene(scn);
 
+	scn->AddTexture("../res/textures/box0.bmp", false);
+	//scn->AddTexture("../res/textures/grass.bmp", false);
+	//scn->AddTexture("../res/textures/bricks.jpg", false);
+	//scn->AddTexture("../res/textures/snake1.png", false);
+
 	while(!display.CloseWindow())
 	{
-		scn->Draw(1,0,scn->BACK,true,false);
+		scn->SetShapeTex(0, 0);
+		scn->Draw(1, 0, scn->BACK, true, false);
+
+		//scn->SetShapeTex(0, 0);
+		//scn->Draw(1, 0, scn->BACK, true, false, 0);
+		//
+		//scn->SetShapeTex(0, 1);
+		//scn->Draw(1, 0, scn->BACK, false, false, 1);
+		//
+		//scn->SetShapeTex(0, 2);
+		//scn->Draw(1, 0, scn->BACK, false, false, 2);
+		//
+		//scn->SetShapeTex(0, 3);
+		//scn->Draw(1, 0, scn->BACK, false, false, 3);
+
 		scn->Motion();
 		display.SwapBuffers();
-		display.PollEvents();	
-			
+		display.PollEvents();
 	}
 	delete scn;
 	return 0;
