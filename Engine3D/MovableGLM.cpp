@@ -9,8 +9,10 @@ static void printMat(const glm::mat4 mat)
 	printf(" matrix: \n");
 	for (int i = 0; i < 4; i++)
 	{
-		for (int j = 0; j < 4; j++)
+		for (int j = 0; j < 4; j++) 
+		{
 			printf("%f ", mat[j][i]);
+		}
 		printf("\n");
 	}
 }
@@ -31,19 +33,19 @@ glm::mat4 MovableGLM::MakeTrans() const
 	// return rot * trans * scl;
 }
 
-void MovableGLM::MyTranslate(glm::vec3 delta,int mode)
+void MovableGLM::MyTranslate(glm::vec3 delta, int mode)
 {
-	trans = glm::translate(trans,delta);
+	trans = glm::translate(trans, delta);
 }
 
-void  MovableGLM::MyRotate(float angle,const glm::vec3 &vec,int mode)
+void MovableGLM::MyRotate(float angle, const glm::vec3 &vec, int mode)
 {
-	rot = glm::rotate(rot,angle,vec);
+	rot = glm::rotate(rot, angle, vec);
 }
 	
-void  MovableGLM::MyScale(glm::vec3 scale)
+void MovableGLM::MyScale(glm::vec3 scale)
 {
-	scl = glm::scale(scl,scale);
+	scl = glm::scale(scl, scale);
 }
 
 void MovableGLM::ZeroTrans()

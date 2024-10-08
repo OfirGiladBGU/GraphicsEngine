@@ -9,8 +9,10 @@ static void printMat(glm::mat4 phi)
 	printf(" matrix: \n");
 		for (int i = 0; i < 4; i++)
 		{
-			for (int j = 0; j < 4; j++)
+			for (int j = 0; j < 4; j++) 
+			{
 				printf("%f ", phi[j][i]);
+			}
 			printf("\n");
 		}
 }

@@ -8,14 +8,15 @@ static void printMat(const glm::mat4 mat)
 	for (int i = 0; i < 4; i++)
 	{
 		for (int j = 0; j < 4; j++)
+		{
 			printf("%f ", mat[j][i]);
+		}
 		printf("\n");
 	}
 }
 
 Scene::Scene()
 {
-	//
 	glLineWidth(5);
 	
 	cameras.push_back(new Camera(60.0f,1.0,0.1f,100.0f));		
@@ -27,34 +28,40 @@ Scene::Scene()
 	isActive = false;
 }
 
-Scene::Scene(float angle,float relationWH,float near1, float far1)
+Scene::Scene(float angle, float relationWH, float near1, float far1)
 {
 	//glLineWidth(5);
-	cameras.push_back(new Camera(angle,relationWH,near1,far1));
+
+	cameras.push_back(new Camera(angle, relationWH, near1, far1));
 	pickedShape = -1;
 	depth = 0;
 	cameraIndx = 0;
 	xold = 0;
 	yold = 0;
 	isActive = false;
+
+	// Set the camera parameters
+	camera_angle = angle;
+	camera_near = near1;
+	camera_far = far1;
 }
 
-void Scene::AddShapeFromFile(const std::string& fileName,int parent,unsigned int mode)
+void Scene::AddShapeFromFile(const std::string& fileName,int parent, unsigned int mode)
 {
 	chainParents.push_back(parent);
-	shapes.push_back(new Shape(fileName,mode));
+	shapes.push_back(new Shape(fileName, mode));
 }
 
-void Scene::AddShape(int type, int parent,unsigned int mode)
+void Scene::AddShape(int type, int parent, unsigned int mode)
 {
 	chainParents.push_back(parent);
-	shapes.push_back(new Shape(type,mode));
+	shapes.push_back(new Shape(type, mode));
 }
 
 void Scene::AddShapeCopy(int indx,int parent,unsigned int mode)
 {
 	chainParents.push_back(parent);
-	shapes.push_back(new Shape(*shapes[indx],mode));
+	shapes.push_back(new Shape(*shapes[indx], mode));
 }
 
 void Scene::AddShader(const std::string& fileName)
@@ -62,103 +69,107 @@ void Scene::AddShader(const std::string& fileName)
 	shaders.push_back(new Shader(fileName));
 }
 
-void Scene::AddTexture(const std::string& textureFileName,bool for2D)
+void Scene::AddTexture(const std::string& textureFileName, bool for2D)
 {
 	textures.push_back(new Texture(textureFileName));
 }
 
 void Scene::AddTexture(int width,int height, unsigned char *data)
 {
-	textures.push_back(new Texture(width,height,data));
+	textures.push_back(new Texture(width, height, data));
 }
 
-void Scene::AddCamera(glm::vec3& pos , float fov,float relationWH , float zNear, float zFar)
+void Scene::AddCamera(glm::vec3& pos, float fov, float relationWH, float zNear, float zFar)
 {
-	cameras.push_back(new Camera(fov,relationWH,zNear,zFar));
-	cameras.back()->MyTranslate(pos,0);
+	cameras.push_back(new Camera(fov, relationWH, zNear, zFar));
+	cameras.back()->MyTranslate(pos, 0);
 }
 
-void Scene::Draw(int shaderIndx,int cameraIndx,int buffer,bool toClear, bool debugMode, int screenNum)
+void Scene::Draw(int shaderIndx, int cameraIndx, int buffer, bool toClear, bool debugMode, int viewportIndex)
 {
 	glEnable(GL_DEPTH_TEST);
 	glm::mat4 Normal = MakeTrans();
-	
-	glm::mat4 MVP = cameras[cameraIndx]->GetViewProjection()*glm::inverse(cameras[cameraIndx]->MakeTrans());
+	glm::mat4 MVP = cameras[cameraIndx]->GetViewProjection() * glm::inverse(cameras[cameraIndx]->MakeTrans());
 	int p = pickedShape;
-	if(toClear)
+
+	// Clear the screen
+	if (toClear)
 	{
-		if(shaderIndx>0)
-			Clear(1,1,1,1);
+		if(shaderIndx > 0)
+			Clear(1, 1, 1, 1);
 		else
-			Clear(0,0,0,0);
+			Clear(0, 0, 0, 0);
 	}
 
-	if (screenNum == 0) 
+	// Choose 1 of the 4 Viewport
+	if (viewportIndex == 0)
 	{
-		glViewport(0, 256, 256, 256);
+		glViewport(0, height / 2, width / 2, height / 2);
 	}
-	else if (screenNum == 1) 
+	else if (viewportIndex == 1)
 	{
-		glViewport(256, 256, 256, 256);
+		glViewport(width / 2, height / 2, width / 2, height / 2);
 	}
-	else if (screenNum == 2) 
+	else if (viewportIndex == 2)
 	{
-		glViewport(0, 0, 256, 256);
+		glViewport(0, 0, width / 2, height / 2);
 	}
-	else if (screenNum == 3) 
+	else if (viewportIndex == 3)
 	{
-		glViewport(256, 0, 256, 256);
+		glViewport(width / 2, 0, width / 2, height / 2);
 	}
 
-	for (unsigned int i=0; i<shapes.size();i++)
+	// Draw the shapes
+	for (unsigned int i = 0; i < shapes.size(); i++)
 	{
-		if(shapes[i]->Is2Render())
+		if (shapes[i]->Is2Render())
 		{
 			glm::mat4 Model = Normal * shapes[i]->MakeTrans();
 				
-			if(shaderIndx > 0)
+			if (shaderIndx > 0)
 			{
-				Update(MVP,Model,shapes[i]->GetShader());
+				Update(MVP, Model, shapes[i]->GetShader());
 				shapes[i]->Draw(shaders,textures,false);	
 			}
 			else 
-			{ //picking
-				Update(MVP,Model,0);
-				shapes[i]->Draw(shaders,textures,true);
+			{ 
+				// For Picking
+				Update(MVP, Model, 0);
+				shapes[i]->Draw(shaders, textures, true);
 			}
 		}
 	}
 	pickedShape = p;
 }
 
-void Scene::MoveCamera(int cameraIndx,int type,float amt)
+void Scene::MoveCamera(int cameraIndx, int type, float amt)
 {
 	switch (type)
 	{
 		case xTranslate:
-			cameras[cameraIndx]->MyTranslate(glm::vec3(amt,0,0),0);
+			cameras[cameraIndx]->MyTranslate(glm::vec3(amt, 0, 0), 0);
 		break;
 		case yTranslate:
-			cameras[cameraIndx]->MyTranslate(glm::vec3(0,amt,0),0);
+			cameras[cameraIndx]->MyTranslate(glm::vec3(0, amt, 0), 0);
 		break;
 		case zTranslate:
-			cameras[cameraIndx]->MyTranslate(glm::vec3(0,0,amt),0);
+			cameras[cameraIndx]->MyTranslate(glm::vec3(0, 0, amt), 0);
 		break;
 		case xRotate:
-			cameras[cameraIndx]->MyRotate(amt,glm::vec3(1,0,0),0);
+			cameras[cameraIndx]->MyRotate(amt, glm::vec3(1, 0, 0), 0);
 		break;
 		case yRotate:
-			cameras[cameraIndx]->MyRotate(amt,glm::vec3(0,1,0),0);
+			cameras[cameraIndx]->MyRotate(amt, glm::vec3(0, 1, 0), 0);
 		break;
 		case zRotate:
-			cameras[cameraIndx]->MyRotate(amt,glm::vec3(0,0,1),0);
+			cameras[cameraIndx]->MyRotate(amt, glm::vec3(0, 0, 1), 0);
 		break;
 		default:
 			break;
 	}
 }
 
-void Scene::ShapeTransformation(int type,float amt)
+void Scene::ShapeTransformation(int type, float amt)
 {
 	if(glm::abs(amt)>1e-5)
 	{
@@ -189,35 +200,54 @@ void Scene::ShapeTransformation(int type,float amt)
 
 }
 
-void Scene::Resize(int width,int height)
+void Scene::Resize(int width, int height)
 {
-	cameras[0]->SetProjection(cameras[0]->GetAngle(),(float)width/height);
-	glViewport(0,0,width,height);
-	std::cout<<cameras[0]->GetRelationWH()<<std::endl;
+	cameras[0]->SetProjection(cameras[0]->GetAngle(), (float)width/height);
+	glViewport(0, 0, width, height);
+	std::cout << cameras[0]->GetRelationWH() << std::endl;
+
+	// Set the width and height
+	this->width = width;
+	this->height = height;
 }
 
-float Scene::Picking(int x,int y)
+float Scene::Picking(int x, int y)
 {
-	// TODO
+	// TODO: Implement Picking
+	x_picked = x;
+	y_picked = y;
 	return 0;
 }
 
 //return coordinates in global system for a tip of arm position is local system 
 void Scene::MouseProccessing(int button)
 {
-	if(pickedShape == -1)
+	if (pickedShape == -1)
 	{
-		if(button == 1 )
-		{				
-
-			MyTranslate(glm::vec3(-xrel/20.0f,0,0),0);
-			MyTranslate(glm::vec3(0,yrel/20.0f,0),0);
+		if (button == 1)
+		{
+			MyTranslate(glm::vec3(-xrel/20.0f, 0, 0), 0);
+			MyTranslate(glm::vec3(0, yrel/20.0f, 0), 0);
 			WhenTranslate();
 		}
 		else
 		{
-			MyRotate(xrel/2.0f,glm::vec3(1,0,0),0);
-			MyRotate(yrel/2.0f,glm::vec3(0,0,1),0);
+			MyRotate(xrel/2.0f, glm::vec3(1, 0, 0), 0);
+			MyRotate(yrel/2.0f, glm::vec3(0, 0, 1), 0);
+			WhenRotate();
+		}
+	}
+	else
+	{
+		// TODO: Implement Z-Buffer
+		if (button == 1)
+		{
+			// TODO: Use Z-Buffer to Implement Translate
+			WhenTranslate();
+		}
+		else
+		{
+			// TODO: Use camera parameters to Implement Rotation according to current view
 			WhenRotate();
 		}
 	}
@@ -233,7 +263,7 @@ void Scene::ZeroShapesTrans()
 
 void Scene::ReadPixel()
 {
-	glReadPixels(1,1,1,1,GL_DEPTH_COMPONENT,GL_FLOAT,&depth);
+	glReadPixels(1, 1, 1, 1, GL_DEPTH_COMPONENT, GL_FLOAT, &depth);
 }
 
 void Scene::UpdatePosition(float xpos, float ypos)

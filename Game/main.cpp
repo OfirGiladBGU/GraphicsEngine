@@ -11,13 +11,14 @@ int main(int argc,char *argv[])
 	const float NEAR = 1.0f;
 	const float FAR = 100.0f;
 
-	Game *scn = new Game(CAMERA_ANGLE,(float)DISPLAY_WIDTH/DISPLAY_HEIGHT,NEAR,FAR);
+	Game *scn = new Game(CAMERA_ANGLE, (float)DISPLAY_WIDTH/DISPLAY_HEIGHT, NEAR, FAR);
 	
 	Display display(DISPLAY_WIDTH, DISPLAY_HEIGHT, "OpenGL");
 	
 	Init(display);
 	
 	scn->Init();
+	scn->Resize(DISPLAY_WIDTH, DISPLAY_HEIGHT);
 	scn->AddShape(scn->Plane, -1, scn->TRIANGLES);
 	scn->MoveCamera(0, scn->zTranslate, 10);
 
