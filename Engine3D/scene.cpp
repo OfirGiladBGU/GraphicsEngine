@@ -94,27 +94,31 @@ void Scene::Draw(int shaderIndx, int cameraIndx, int buffer, bool toClear, bool 
 
 	// Clear the screen
 	if (toClear)
-	{
-		if(shaderIndx > 0)
-			Clear(1, 1, 1, 1);
-		else
+	{	
+		if (shaderIndx == 0) // Picking Shader
+		{
 			Clear(0, 0, 0, 0);
+		}
+		else // Other Shaders (Basic Shader)
+		{
+			Clear(1, 1, 1, 1);
+		}
 	}
 
 	// Choose 1 of the 4 Viewport
-	if (viewportIndex == 0)
+	if (viewportIndex == 0) // Top Left
 	{
-		glViewport(0, height / 2, width / 2, height / 2);
+		glViewport(0, height / 2, width / 2, height / 2);  
 	}
-	else if (viewportIndex == 1)
+	else if (viewportIndex == 1) // Top Right
 	{
 		glViewport(width / 2, height / 2, width / 2, height / 2);
 	}
-	else if (viewportIndex == 2)
+	else if (viewportIndex == 2) // Bottom Left
 	{
 		glViewport(0, 0, width / 2, height / 2);
 	}
-	else if (viewportIndex == 3)
+	else if (viewportIndex == 3) // Bottom Right
 	{
 		glViewport(width / 2, 0, width / 2, height / 2);
 	}
@@ -125,18 +129,17 @@ void Scene::Draw(int shaderIndx, int cameraIndx, int buffer, bool toClear, bool 
 		if (shapes[i]->Is2Render())
 		{
 			glm::mat4 Model = Normal * shapes[i]->MakeTrans();
-				
-			if (shaderIndx > 0)
+			
+			if (shaderIndx == 0) // Picking Shader
 			{
-				Update(MVP, Model, shapes[i]->GetShader());
-				shapes[i]->Draw(shaders,textures,false);	
-			}
-			else 
-			{ 
-				// For Picking
 				pickedShape = i;
 				Update(MVP, Model, 0);
 				shapes[i]->Draw(shaders, textures, true);
+			}
+			else // Other Shaders (Basic Shader)
+			{
+				Update(MVP, Model, shapes[i]->GetShader());
+				shapes[i]->Draw(shaders, textures, false);
 			}
 		}
 	}
