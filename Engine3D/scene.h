@@ -47,7 +47,9 @@ public:
 	inline float GetNear(int cameraIndx) { return cameras[cameraIndx]->GetNear(); }
 	inline float GetFar(int cameraIndx) { return cameras[cameraIndx]->GetFar(); }
 
-	void ReadPixel();
+	//void ReadPixel();
+	void ReadPixelDepth();
+	void ReadPixelColor();
 	
 	inline float GetAngle(int cameraIndx) { return cameras[cameraIndx]->GetAngle(); }
 	inline void Activate() {isActive = true; }
@@ -79,8 +81,8 @@ public:
 private:
 	std::vector<Camera*> cameras; 
 
-	float depth;
-	int xold, yold,xrel, yrel;
+	//float depth;
+	int xold, yold, xrel, yrel;
 	int cameraIndx;
 	void Clear(float r, float g, float b, float a);
 
@@ -96,5 +98,5 @@ protected:
 	// New Variables
 	int width, height;
 	float camera_angle, camera_near, camera_far;
-	float picked_depth, x_picked, y_picked;
+	float depth_picked, x_picked, y_picked;
 };

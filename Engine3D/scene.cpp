@@ -21,7 +21,7 @@ Scene::Scene()
 	
 	cameras.push_back(new Camera(60.0f,1.0,0.1f,100.0f));		
 	pickedShape = -1;
-	depth = 0;
+	//depth = 0;
 	cameraIndx = 0;
 	xold = 0;
 	yold = 0;
@@ -34,7 +34,7 @@ Scene::Scene(float angle, float relationWH, float near1, float far1)
 
 	cameras.push_back(new Camera(angle, relationWH, near1, far1));
 	pickedShape = -1;
-	depth = 0;
+	//depth = 0;
 	cameraIndx = 0;
 	xold = 0;
 	yold = 0;
@@ -134,6 +134,7 @@ void Scene::Draw(int shaderIndx, int cameraIndx, int buffer, bool toClear, bool 
 			else 
 			{ 
 				// For Picking
+				pickedShape = i;
 				Update(MVP, Model, 0);
 				shapes[i]->Draw(shaders, textures, true);
 			}
@@ -215,7 +216,7 @@ float Scene::Picking(int x, int y)
 {
 	// TODO: Implement Picking
 	x_picked = x;
-	y_picked = y;
+	y_picked = this->height - y;
 	return 0;
 }
 
@@ -226,14 +227,14 @@ void Scene::MouseProccessing(int button)
 	{
 		if (button == 1)
 		{
-			MyTranslate(glm::vec3(-xrel/20.0f, 0, 0), 0);
-			MyTranslate(glm::vec3(0, yrel/20.0f, 0), 0);
+			MyTranslate(glm::vec3(-xrel / 20.0f, 0, 0), 0);
+			MyTranslate(glm::vec3(0, yrel / 20.0f, 0), 0);
 			WhenTranslate();
 		}
 		else
 		{
-			MyRotate(xrel/2.0f, glm::vec3(1, 0, 0), 0);
-			MyRotate(yrel/2.0f, glm::vec3(0, 0, 1), 0);
+			MyRotate(xrel / 2.0f, glm::vec3(0, 1, 0), 0);
+			MyRotate(yrel / 2.0f, glm::vec3(1, 0, 0), 0);
 			WhenRotate();
 		}
 	}
@@ -247,7 +248,7 @@ void Scene::MouseProccessing(int button)
 		}
 		else
 		{
-			// TODO: Use camera parameters to Implement Rotation according to current view
+			// TODO: Use camera parameters to Implement Rotation according to current camera view
 			WhenRotate();
 		}
 	}
@@ -261,9 +262,22 @@ void Scene::ZeroShapesTrans()
 	}
 }
 
-void Scene::ReadPixel()
+//void Scene::ReadPixel()
+//{
+//	glReadPixels(1, 1, 1, 1, GL_DEPTH_COMPONENT, GL_FLOAT, &depth);
+//}
+
+void Scene::ReadPixelDepth()
 {
-	glReadPixels(1, 1, 1, 1, GL_DEPTH_COMPONENT, GL_FLOAT, &depth);
+	glReadPixels(x_picked, y_picked, 1, 1, GL_DEPTH_COMPONENT, GL_FLOAT, &depth_picked);
+}
+
+void Scene::ReadPixelColor()
+{
+	unsigned char color_picked[]{ 0, 0, 0, 0 };
+	glReadPixels(x_picked, y_picked, 1, 1, GL_RGBA, GL_UNSIGNED_BYTE, color_picked);
+	int color_id = color_picked[0] | color_picked[1] << 8 | color_picked[2] << 16;
+	pickedShape = color_id - 1;
 }
 
 void Scene::UpdatePosition(float xpos, float ypos)
