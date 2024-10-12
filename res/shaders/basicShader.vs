@@ -15,12 +15,9 @@ uniform mat4 Normal;
 
 void main()
 {
-	
 	texCoord0 = texCoords;
 	color0 = color;
 	normal0 = (Normal * vec4(normal, 0.0)).xyz;
 	position0 = vec3(Normal * vec4(position, 1.0));
 	gl_Position = MVP *Normal* vec4(position, 1.0); //you must have gl_Position
 }
-
-
