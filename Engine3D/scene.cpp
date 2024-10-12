@@ -208,7 +208,7 @@ void Scene::Resize(int width, int height)
 {
 	cameras[0]->SetProjection(cameras[0]->GetAngle(), (float)width/height);
 	glViewport(0, 0, width, height);
-	std::cout << cameras[0]->GetRelationWH() << std::endl;
+	//std::cout << "Camera Relation Width/Height: " << cameras[0]->GetRelationWH() << std::endl;
 
 	// Set the width and height
 	this->width = width;

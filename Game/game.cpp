@@ -49,7 +49,7 @@ void Game::Update(const glm::mat4 &MVP, const glm::mat4 &Model, const int shader
 	}
 	else // Other Shaders (Basic Shader)
 	{
-		s->SetUniform4f("lightColor", 0.7f, 0.8f, 0.1f, 1.0f);
+		s->SetUniform4f("lightColor", 1.0f, 1.0f, 1.0f, 1.0f);
 	}
 	s->Unbind();
 }
