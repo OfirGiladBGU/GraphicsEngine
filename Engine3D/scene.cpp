@@ -97,11 +97,11 @@ void Scene::Draw(int shaderIndx, int cameraIndx, int buffer, bool toClear, bool 
 	{	
 		if (shaderIndx == 0) // Picking Shader
 		{
-			Clear(0, 0, 0, 0);
+			Clear(0, 0, 0, 0);  // Black Screen
 		}
 		else // Other Shaders (Basic Shader)
 		{
-			Clear(1, 1, 1, 1);
+			Clear(1, 1, 1, 1);  // White Screen
 		}
 	}
 
