@@ -1,7 +1,6 @@
 #include "glad/include/glad/glad.h"
 #include "shape.h"
 
-
 Shape::Shape(const Shape& shape,unsigned int mode)
 {
 	

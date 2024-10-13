@@ -2,7 +2,6 @@
 #include "display.h"
 #include "game.h"
 
-
 void mouse_callback(GLFWwindow* window,int button, int action, int mods)
 {	
 	if(action == GLFW_PRESS )

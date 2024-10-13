@@ -45,4 +45,3 @@ public:
 
 	virtual ~Shape(void);
 };
-

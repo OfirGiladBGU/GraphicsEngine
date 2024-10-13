@@ -5,7 +5,6 @@
 #include "IndexBuffer.hpp"
 #include "obj_loader.h"
 
-
 MeshConstructor::MeshConstructor(const int type)
 {
 	switch (type)

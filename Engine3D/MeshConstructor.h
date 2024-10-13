@@ -4,7 +4,6 @@
 #include "VertexArray.hpp"
 #include "Mesh.h"
 
-
 class MeshConstructor
 {
 	VertexArray vao;
@@ -42,4 +41,3 @@ public:
 	~MeshConstructor(void);
 
 };
-

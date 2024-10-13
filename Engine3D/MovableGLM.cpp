@@ -3,7 +3,6 @@
 #include "../res/includes/glm/gtc/matrix_transform.hpp"
 #include "../res/includes/glm/gtc/quaternion.hpp"
 
-
 static void printMat(const glm::mat4 mat)
 {
 	printf(" matrix: \n");

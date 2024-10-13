@@ -22,43 +22,43 @@ public:
 };
 
 struct Vertex
+{
+public:
+	Vertex(const glm::vec3& pos, const glm::vec2& texCoord, const glm::vec3& normal, const glm::vec3& color)
 	{
-	public:
-		Vertex(const glm::vec3& pos, const glm::vec2& texCoord, const glm::vec3& normal, const glm::vec3& color)
-		{
-			this->pos = pos;
-			this->texCoord = texCoord;
-			this->normal = normal;
-			this->color = color;
-		}
+		this->pos = pos;
+		this->texCoord = texCoord;
+		this->normal = normal;
+		this->color = color;
+	}
 
-		glm::vec3* GetPos() { return &pos; }
-		glm::vec2* GetTexCoord() { return &texCoord; }
-		glm::vec3* GetNormal() { return &normal; }
-		glm::vec3* GetColor() { return &color; }
-	private:
-		glm::vec3 pos;
-		glm::vec2 texCoord;
-		glm::vec3 normal;
-		glm::vec3 color;
-	};
+	glm::vec3* GetPos() { return &pos; }
+	glm::vec2* GetTexCoord() { return &texCoord; }
+	glm::vec3* GetNormal() { return &normal; }
+	glm::vec3* GetColor() { return &color; }
+private:
+	glm::vec3 pos;
+	glm::vec2 texCoord;
+	glm::vec3 normal;
+	glm::vec3 color;
+};
 
 struct LineVertex
+{
+public:
+	LineVertex(const glm::vec3& pos, const glm::vec3& color)
 	{
-	public:
-		LineVertex(const glm::vec3& pos, const glm::vec3& color)
-		{
-			this->pos = pos;
-			this->color = color;
-		}
+		this->pos = pos;
+		this->color = color;
+	}
 
-		glm::vec3* GetPos() { return &pos; }
-		glm::vec3* GetColor() { return &color; }
+	glm::vec3* GetPos() { return &pos; }
+	glm::vec3* GetColor() { return &color; }
 	
-	private:
-		glm::vec3 pos;
-		glm::vec3 color;
-	};
+private:
+	glm::vec3 pos;
+	glm::vec3 color;
+};
 
 class BoundingBox
 {
