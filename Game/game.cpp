@@ -42,7 +42,6 @@ void Game::Update(const glm::mat4 &MVP, const glm::mat4 &Model, const int shader
 	s->Bind();
 	s->SetUniformMat4f("MVP", MVP);
 	s->SetUniformMat4f("Normal", Model);
-	s->SetUniform4f("lightDirection", 0.0f, 0.0f, -1.0f, 0.0f);
 	if (shaderIndx == 0) // Picking Shader
 	{
 		s->SetUniform4f("lightColor", r / 255.0f, g / 255.0f, b / 255.0f, 1.0f);

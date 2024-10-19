@@ -6,12 +6,9 @@ in vec2 texCoord0;
 in vec3 position0;
 
 uniform sampler2D sampler;
-uniform vec4 lightDirection;
 uniform vec4 lightColor;
-
-out vec4 fragColor;
 
 void main()
 {
-	fragColor = lightColor;
+	gl_FragColor = lightColor;
 }

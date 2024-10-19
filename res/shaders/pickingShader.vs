@@ -15,6 +15,5 @@ uniform mat4 Normal;
 
 void main()
 {
-	//color0 = color;
 	gl_Position = MVP * Normal * vec4(position, 1.0);
 }
