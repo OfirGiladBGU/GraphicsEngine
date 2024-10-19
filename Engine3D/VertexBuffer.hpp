@@ -22,10 +22,4 @@ public:
 
 };
 
-
-
-
-
-
-
 #endif /* SRC_VERTEXBUFFER_HPP_ */

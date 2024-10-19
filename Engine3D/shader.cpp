@@ -7,19 +7,18 @@
 static void printMat(glm::mat4 phi)
 {
 	printf(" matrix: \n");
-		for (int i = 0; i < 4; i++)
+	for (int i = 0; i < 4; i++)
+	{
+		for (int j = 0; j < 4; j++) 
 		{
-			for (int j = 0; j < 4; j++) 
-			{
-				printf("%f ", phi[j][i]);
-			}
-			printf("\n");
+			printf("%f ", phi[j][i]);
 		}
+		printf("\n");
+	}
 }
 
 Shader::Shader(const std::string& fileName)
 {
-	
 	m_program = glCreateProgram();
 	m_shaders[0] = CreateShader(LoadShader(fileName + ".vs"), GL_VERTEX_SHADER);
 	m_shaders[1] = CreateShader(LoadShader(fileName + ".fs"), GL_FRAGMENT_SHADER);
@@ -70,9 +69,9 @@ std::string Shader::LoadShader(const std::string& fileName)
         {
             getline(file, line);
 			output.append(line + "\n");
-			std::cout<<line<<std::endl;
+			std::cout << line << std::endl;
         }
-		std::cout<<std::endl;
+		std::cout << std::endl;
     }
     else
     {
@@ -105,19 +104,19 @@ unsigned int Shader::CreateShader(const std::string& text, unsigned int type)
 
 
 void Shader::SetUniform1i(const std::string& name, int value) {
-	glUniform1i(GetUniformLocation(name),value);
+	glUniform1i(GetUniformLocation(name), value);
 }
 
 void Shader::SetUniform4i(const std::string& name,  int vi0,int vi1,int vi2,int vi3) {
-	glUniform4i(GetUniformLocation(name),vi0,vi1,vi2,vi3);
+	glUniform4i(GetUniformLocation(name), vi0, vi1, vi2, vi3);
 }
 
 void Shader::SetUniform1f(const std::string& name, float value) {
-	glUniform1f(GetUniformLocation(name),value);
+	glUniform1f(GetUniformLocation(name), value);
 }
 
 void Shader::SetUniform4f(const std::string& name, float v0, float v1, float v2, float v3) {
-	glUniform4f(GetUniformLocation(name),v0,v1,v2,v3);
+	glUniform4f(GetUniformLocation(name), v0, v1, v2, v3);
 }
 
 void Shader::SetUniformMat4f(const std::string& name, const glm::mat4&  matrix) {

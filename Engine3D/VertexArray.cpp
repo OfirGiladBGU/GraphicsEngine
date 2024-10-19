@@ -11,18 +11,18 @@
 #include "VertexArray.hpp"
 
 VertexArray::VertexArray() {
-	glGenVertexArrays(1,&m_RendererID);
+	glGenVertexArrays(1, &m_RendererID);
 }
 
 VertexArray::~VertexArray() {
-	glDeleteVertexArrays(1,&m_RendererID);
+	glDeleteVertexArrays(1, &m_RendererID);
 }
 
-void VertexArray::AddBuffer(const VertexBuffer& vb,int attribNum,int count, int type)
+void VertexArray::AddBuffer(const VertexBuffer& vb, int attribNum, int count, int type)
 {
-		//vb.Bind();
-		glEnableVertexAttribArray(attribNum);
-		glVertexAttribPointer(attribNum,count,type,GL_FALSE, 0,0);
+	//vb.Bind();
+	glEnableVertexAttribArray(attribNum);
+	glVertexAttribPointer(attribNum, count ,type, GL_FALSE, 0, 0);
 }
 
 void VertexArray::Bind() const {
@@ -32,4 +32,3 @@ void VertexArray::Bind() const {
 void VertexArray::Unbind() const {
 	glBindVertexArray(0);
 }
-

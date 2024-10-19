@@ -12,12 +12,11 @@ public:
 	VertexArray();
 	~VertexArray();
 
-	void AddBuffer(const VertexBuffer& vb,int attribNum,int count,int type);
+	void AddBuffer(const VertexBuffer& vb, int attribNum, int count, int type);
 
 	void Bind() const;
 	void Unbind() const;
-	void Draw(int mode,const IndexBuffer& ib,const Shader& shader);
+	void Draw(int mode,const IndexBuffer& ib, const Shader& shader);
 };
-
 
 #endif
